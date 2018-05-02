@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
-# @Last Modified by:   wangfpp 
-# @Last Modified time: 2018-04-23 10:16:10 
+# @Last Modified by:   wangjb
+# @Last Modified time: 2018-05-02 15:31:32
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -12,14 +12,16 @@ import numpy
 db = torndb.Connection(host = "localhost", database = "news", user = "root", password = "ddkk1212")
 
 class mainHandler(tornado.web.RequestHandler):
-    def get(self,query):
+    def get(self,body):
         query =  self.request.arguments
+        print query
         if query:
             page = int(query['page'][0])
             size = int(query['size'][0])
             info = db.query("select * from newsInfo;")
             total = len(info)
             info = info[(page -1)*size:(page)*size]
+            print len(info)
         else:
             info = db.query("select * from newsInfo;")
             total = len(info)
@@ -86,6 +88,8 @@ class login(tornado.web.RequestHandler):
             search =  db.query(sql)
             if len(search) == 0:
                 self.set_status(403)
+                self.set_header('Access-Control-Expose-Headers','Authentication')
+                
                 self.finish(json.dumps({"reason":'user not exit'}))
             else :
                 if search[0]['password'] == password:
