@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import vuex from 'vuex'
+import store from '@/config/store.js' 
 import router from './route.js'
 import iView from 'iview' 
 import 'iview/dist/styles/fonts/ionicons.eot'
@@ -16,6 +18,8 @@ Vue.prototype.$Message = Message
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
+

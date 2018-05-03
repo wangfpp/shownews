@@ -17,13 +17,16 @@
             <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
         </FormItem>
      	<span>无账号去<a v-on:click="jump">注册</a> </span>
+     	<span>{{count}}</span>
     </Form>
 	</div>
 </template>
 
 <script type="text/javascript">
+
 import { mainServer } from 'server/mainserver.js'
 import { Form, FormItem, Input, Icon, Button } from 'iview'
+import { mapState } from 'vuex'
 	export default {
 		name : 'login',
 		 data () {
@@ -42,7 +45,12 @@ import { Form, FormItem, Input, Icon, Button } from 'iview'
 	                ]
 	            }
 	       }
-	   },
+	    },
+	    computed : {
+	    	count () {
+	    		return this.$store.state.count;
+	    	}
+	    },
 		components : {
 			FormItem,
 			Form,
@@ -54,6 +62,7 @@ import { Form, FormItem, Input, Icon, Button } from 'iview'
 			login (){
 				let _this = this;
 				mainServer.login({phonenum : _this.formInline.phonenum, password : _this.formInline.password}).then( res => {
+					_this.$store.state.user.userName = res.data.username
 					_this.$router.push({
 						name : 'home'
 					})
@@ -83,6 +92,7 @@ import { Form, FormItem, Input, Icon, Button } from 'iview'
 		},
 		mounted () {
 			let _this = this;
+			console.log(this.$store.state.user.userName)
 			// mainServer.prelogin().then( res => {
 			// 	this.$router.push({
 			// 		name : 'home'

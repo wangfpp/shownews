@@ -58,26 +58,50 @@
     //         console.log(er)
     //     }
     // })
-    function getArea(a,b){
-        let [x1,y1,x2,y2,x3,y3,x4,y4] = [a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]];
-        console.log(`x1=${x1},y1=${y1},x2=${x2},y2=${y2},x3=${x3},y3=${y3},x4=${x4},y4=${y4}`)
-        if((Math.abs(x3-x1) >= 0&& Math.abs(y3-y1) >= 0)&&Math.abs(y4-y2)>=0 &&Math.abs(x4-x2)>=0&&(y2-y3)>=0){
-            return (x4<=x2) ? (y4-y3)*(x2-x3) :(y2-y3)*(x2-x3)
-        }else{
-          return false  
-        }
+//     function getArea(a,b){
+//         let [x1,y1,x2,y2,x3,y3,x4,y4] = [a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]];
+//         console.log(`x1=${x1},y1=${y1},x2=${x2},y2=${y2},x3=${x3},y3=${y3},x4=${x4},y4=${y4}`)
+//         if((Math.abs(x3-x1) >= 0&& Math.abs(y3-y1) >= 0)&&Math.abs(y4-y2)>=0 &&Math.abs(x4-x2)>=0&&(y2-y3)>=0){
+//             return (x4<=x2) ? (y4-y3)*(x2-x3) :(y2-y3)*(x2-x3)
+//         }else{
+//           return false  
+//         }
 
-    }
-console.log('[10, 10, 20, 20],[10, 10, 20, 20]',getArea([10, 10, 20, 20],[10, 10, 20, 20]))
+//     }
+// console.log('[10, 10, 20, 20],[10, 10, 20, 20]',getArea([10, 10, 20, 20],[10, 10, 20, 20]))
 
-console.log('[10, 10, 20, 20],[30, 30, 40, 40]',getArea([10, 10, 20, 20],[30, 30, 40, 40]))
+// console.log('[10, 10, 20, 20],[30, 30, 40, 40]',getArea([10, 10, 20, 20],[30, 30, 40, 40]))
 
-console.log('[10, 10, 20, 20],[5, 5, 30, 30]',getArea([10, 10, 20, 20],[5, 5, 30, 30]))
+// console.log('[10, 10, 20, 20],[5, 5, 30, 30]',getArea([10, 10, 20, 20],[5, 5, 30, 30]))
 
-console.log('[10, 10, 20, 20],[15, 15, 30, 30]',getArea([10, 10, 20, 20],[15, 15, 30, 30]))
+// console.log('[10, 10, 20, 20],[15, 15, 30, 30]',getArea([10, 10, 20, 20],[15, 15, 30, 30]))
 
-console.log('[10, 10, 40, 40],[15, 15, 30, 30]',getArea([10, 10, 40, 40],[15, 15, 30, 30]))
-
+// console.log('[10, 10, 40, 40],[15, 15, 30, 30]',getArea([10, 10, 40, 40],[15, 15, 30, 30]))
+// class isThreeMonth {
+//     constructor(){  
+//        this.month = [1,2,3,4,5,6,7,8,9,10,11,12];  
+//     }
+//     mainHandler(date1,date2){
+//         let [year1,month1,day1] = this.splitDate(date1);
+//         let [year2,month2,day2] = this.splitDate(date2);
+//         if(Math.abs(year2-year1) > 1){
+//             return false
+//         }else{
+//             if(Math.abs(month2 - month1) > 3){
+//                 return false
+//             }
+//         }
+//     }
+//     splitDate(date){
+//         let splitDate = [];
+//         date.split('-').forEach(item =>{
+//             splitDate.push(Number(item.replace(/\b(0+)/gi,"")))
+//         })
+//         return splitDate
+//     }
+// }
+// a = new isThreeMonth()
+// console.log(a.mainHandler('2018-11-28','2019-2-29'))
 
 
 

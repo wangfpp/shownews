@@ -2,7 +2,7 @@
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
 # @Last Modified by:   wangjb
-# @Last Modified time: 2018-05-02 15:31:32
+# @Last Modified time: 2018-05-02 17:27:01
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -52,7 +52,7 @@ class controlNews(tornado.web.RequestHandler):
 class register(tornado.web.RequestHandler):
     def post(self,user):
         userinfo = json.loads(self.request.body)
-        
+        print userinfo
         if userinfo:
             phonenum = userinfo['phonenum']
             userName = userinfo['username']
@@ -95,7 +95,7 @@ class login(tornado.web.RequestHandler):
                 if search[0]['password'] == password:
                     self.set_status(200)
                     self.set_secure_cookie('news','aaaaaa',expires_days=1,version=None)
-                    self.finish(json.dumps({"data":self.get_secure_cookie('news')}))
+                    self.finish(json.dumps({"data":{"username":search[0]['name']}}))
                 else:
                     self.set_status(403)
                     self.finish(json.dumps({"reason":'pass err'}))
