@@ -1,0 +1,36 @@
+$color : #f00;
+#news{
+	width:100%;
+	height:100%;
+	table{
+		tr{
+			th{
+				text-align:center !important;
+			}
+			td {
+				color:#000;
+				overflow: hidden;
+				text-overflow:ellipsis;
+				white-space: nowrap;
+				line-height: 100%;
+				text-align: center !important;
+				padding: 0;
+				margin : 0;
+				div {
+					overflow: hidden;
+					text-overflow:ellipsis;
+					white-space: nowrap;
+					line-height: 100%;
+					padding: 0;
+					margin : 0;
+					span{
+						overflow: hidden;
+						text-overflow:ellipsis;
+						white-space: nowrap;
+						line-height: 100%;
+					}
+				}
+			}
+		}
+	}
+}

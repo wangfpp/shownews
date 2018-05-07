@@ -1,0 +1,39 @@
+$width : 100%;
+#home{
+	width:$width;
+	height:$width;
+	.top{
+		width:$width;
+		height:60px;
+		background: #495060;
+		ul{
+			width:$width;
+			height:$width;
+			padding: 0 30px;
+			box-sizing:border-box;
+			li{
+				float: left;
+				line-height:60px;
+				color:hsla(0,0%,100%,.7);
+				margin: 0 5px;
+				a{
+					color:hsla(0,0%,100%,.7);
+					display: inline-block;
+					width:70px;
+					text-align:center;
+				}
+				a.router-link-active,a:hover{
+					color:#fff;
+				}
+			}
+			li.user{
+				float:right;
+				margin-right: 20px;
+			}
+		}
+	}
+	.content{
+		width:$width;
+		height:calc($width - 60px);
+	}
+}
