@@ -2,7 +2,7 @@
 * @Author: wangfpp
 * @Date:   2018-04-25 16:11:10
 * @Last Modified by:   wangjb
-* @Last Modified time: 2018-05-03 17:44:21
+* @Last Modified time: 2018-05-04 12:23:41
 */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -35,7 +35,7 @@ export default new Router({
           component : user
         },
         {
-          path: '/detail',
+          path: '/home/detail',
           name: 'detail',
           component: resolve => require(['@/router/detail/newsDetail.vue'],resolve)
         },

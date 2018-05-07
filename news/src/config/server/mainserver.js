@@ -2,7 +2,7 @@
 * @Author: wangfpp
 * @Date:   2018-04-25 15:24:23
 * @Last Modified by:   wangjb
-* @Last Modified time: 2018-05-02 15:48:25
+* @Last Modified time: 2018-05-06 00:07:00
 */
 import axios from 'axios'
 let mainServer = {
@@ -77,6 +77,13 @@ const jsonPath = 'static/json/'
 					resolve(res.data)
 				}).catch(err =>{
 					reject(err);
+				})
+			})
+		},
+		getOriginalNews : params => {
+			return new Promise((resolve,reject)=>{
+				axios.get(`https://bird.ioliu.cn/v1?url=${params}`).then(res => {
+						resolve(res.data)
 				})
 			})
 		}

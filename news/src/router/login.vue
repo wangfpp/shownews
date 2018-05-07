@@ -15,15 +15,15 @@
         
         <FormItem>
             <Button type="primary" @click="handleSubmit('formInline')">登录</Button>
+            <span>无账号去<a v-on:click="jump">注册</a> </span>
         </FormItem>
-     	<span>无账号去<a v-on:click="jump">注册</a> </span>
-     	<span>{{count}}</span>
+     	
     </Form>
 	</div>
 </template>
 
 <script type="text/javascript">
-
+import '../static/css/login.scss';
 import { mainServer } from 'server/mainserver.js'
 import { Form, FormItem, Input, Icon, Button } from 'iview'
 import { mapState } from 'vuex'
@@ -62,7 +62,8 @@ import { mapState } from 'vuex'
 			login (){
 				let _this = this;
 				mainServer.login({phonenum : _this.formInline.phonenum, password : _this.formInline.password}).then( res => {
-					_this.$store.state.user.userName = res.data.username
+					_this.$store.state.user.userName = res.data.username;
+					_this.$store.state.user.phonenum = res.data.phonenum
 					_this.$router.push({
 						name : 'home'
 					})
@@ -104,6 +105,15 @@ import { mapState } from 'vuex'
 	}
 </script>
 
-<style  scoped>
-	@import '../static/css/login.scss';
+<style  scoped >
+	
 </style>
+
+
+
+
+
+
+
+
+
