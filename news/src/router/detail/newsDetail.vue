@@ -18,6 +18,7 @@
 		</div>
 		
 		<Button type="primary" shape="circle" v-on:click = "updateText()">更新</Button type="primary" shape="circle">
+		<Button type="primary" shape="circle" v-on:click = "origin_url()">跳转原网页</Button type="primary" shape="circle">
 		<Spin fix v-if = "loading">加载中...</Spin>
 	</div>
 </template>
@@ -35,6 +36,7 @@ import axios from 'axios'
 				newsDetail : '',
 				loading : true,
 				html : '',
+				name : ''
 			}
 		},
 		components : {
@@ -47,7 +49,7 @@ import axios from 'axios'
 			
 		},
 		methods : {
-			updateText (){
+			updateText (){//更新新闻/纠正新闻
 				let _this = this;
 				let text = document.getElementById('textdetail').value;
 				mainServer.updateNews({id:_this.id,text:text}).then( req => {
@@ -56,37 +58,36 @@ import axios from 'axios'
 					console.log(err)
 				})
 			},
-			getText(params){
+			getText(params){//获取新闻信息
 				let _this = this;
 				mainServer.controlNews(params).then( req =>{
-				_this.newsDetail = req[0];
-				_this.loading = false;
-			},err => {
-				console.log(err)
-			})
+					_this.newsDetail = req[0];
+					_this.loading = false;
+				},err => {
+					console.log(err)
+				})
+			},
+			origin_url(){//跳转原新闻网页
+				let originName = this.name.split('.')[0].replace(/\_/g,'/');
+				let url = `http://www.chinanews.com/${originName}.shtml`
+				window.open(url)
 			}
 		},
 		mounted () {
 			let _this = this
 			this.id = this.$route.query.id
+			this.name = this.$route.query.name
+			let node = document.createElement('div')
 			_this.getText({params:{id : _this.id}})
 			this.$nextTick(function(){
-				// getOriginalNews : params => {
-				// 	return new Promise((resolve,reject)=>{
-				// 		axios.get(`https://bird.ioliu.cn/v1?url=${params}`).then(res => {
-				// 				resolve(res.data)
-				// 		})
-				// 	})
-				// }  以上的注释是封装的方法  在下面调用的
 				mainServer.getOriginalNews('http://www.chinanews.com/gn/2018/05-04/8506380.shtml').then(res => {
 					_this.html = res;
-					console.log(_this.html)//这里可以打印
+					node.innerHTML = res;
+					//let content = node.getElementById('cont_1_1_2')
+					console.log(node.innerHTML) 
 				})
 			})
 				
-	        //let node = document.createElement('html');
-	        //node.innerHTML = _this.html;
-	        console.log(_this.html)//这里打印就是空
 		}
 	}
 </script>

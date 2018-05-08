@@ -37,9 +37,10 @@ import {Table,Page,Affix,Menu,MenuItem,Icon,MenuGroup,TabPane,Button} from 'ivie
 		},
 		methods : {
 			jumpDetail(currentRow){
+				console.log(currentRow)
 				this.$router.push({
 					name : 'detail',
-					query : {id : currentRow['id']}
+					query : {id : currentRow['id'],name : currentRow['name']}
 				})
 			},
 			changePage(index){
@@ -64,6 +65,7 @@ import {Table,Page,Affix,Menu,MenuItem,Icon,MenuGroup,TabPane,Button} from 'ivie
 		mounted () {
 			let _this = this;
 			this.getNewsList({params :{page:_this.current,size:10}})
+			console.log(this.news)
 		}
 	}
 </script>
