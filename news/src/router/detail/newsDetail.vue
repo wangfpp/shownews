@@ -71,15 +71,22 @@ import axios from 'axios'
 			this.id = this.$route.query.id
 			_this.getText({params:{id : _this.id}})
 			this.$nextTick(function(){
+				// getOriginalNews : params => {
+				// 	return new Promise((resolve,reject)=>{
+				// 		axios.get(`https://bird.ioliu.cn/v1?url=${params}`).then(res => {
+				// 				resolve(res.data)
+				// 		})
+				// 	})
+				// }  以上的注释是封装的方法  在下面调用的
 				mainServer.getOriginalNews('http://www.chinanews.com/gn/2018/05-04/8506380.shtml').then(res => {
 					_this.html = res;
-					console.log('aaa',_this.html)
+					console.log(_this.html)//这里可以打印
 				})
 			})
 				
 	        //let node = document.createElement('html');
 	        //node.innerHTML = _this.html;
-	        //console.log(_this.html)
+	        console.log(_this.html)//这里打印就是空
 		}
 	}
 </script>
