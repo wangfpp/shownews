@@ -1,15 +1,5 @@
 <template>
 	<div id = "detail">
-		<!-- 详情页
-		<div v-for=" item in newsDetail">
-			<p v-for="(value,key) in item">
-				<template v-if ="key == 'name'">
-					<h2>{{value}}</h2>
-				</template>
-				<textarea id="textdetail" name="content" cols="80" rows="10" v-if = "key == 'text'" :value = "value"></textarea>
-			</p>
-		</div>
-		<br/> -->
 		<h3>详情页</h3>
 		<div class="content">
 			<Card :bordered ="true">
@@ -77,14 +67,9 @@ import axios from 'axios'
 			let _this = this
 			this.id = this.$route.query.id
 			this.name = this.$route.query.name
-			let node = document.createElement('div')
 			_this.getText({params:{id : _this.id}})
 			this.$nextTick(function(){
 				mainServer.getOriginalNews('http://www.chinanews.com/gn/2018/05-04/8506380.shtml').then(res => {
-					_this.html = res;
-					node.innerHTML = res;
-					//let content = node.getElementById('cont_1_1_2')
-					console.log(node.innerHTML) 
 				})
 			})
 				
@@ -95,3 +80,16 @@ import axios from 'axios'
 <style scoped>
 	@import './detail.scss';
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
