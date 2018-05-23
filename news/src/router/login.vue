@@ -93,14 +93,13 @@ import { mapState } from 'vuex'
 		},
 		mounted () {
 			let _this = this;
-			console.log(this.$store.state.user.userName)
-			// mainServer.prelogin().then( res => {
-			// 	this.$router.push({
-			// 		name : 'home'
-			// 	})
-			// }, err => {
-			// 	console.log(err)
-			// })
+			mainServer.prelogin().then( res => {
+				// this.$router.push({
+				// 	name : 'home'
+				// })
+			}, err => {
+				console.log(err)
+			})
 		}
 	}
 </script>

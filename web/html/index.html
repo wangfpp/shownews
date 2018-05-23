@@ -8,8 +8,8 @@
     <script src="../js/jquery.js"></script>
 </head>
 <style>
-    p:click{
-        color: #f00
+    p:matches(:first-child, .special) {
+      color: red;
     }
    
 </style>
@@ -31,25 +31,32 @@
             </p>
         </div>
     </table> -->
+    <p>1</p>
+    <p>2</p>
+    <p>3</p>
+    <p class="special">4</p>
+    <p>5</p>
+    <p>6</p>
+    <p>7</p>
     <canvas id="canvas"></canvas>
 </body>
 
 </html>
 <script type="text/javascript">
     
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+// var canvas = document.getElementById("canvas");
+// var ctx = canvas.getContext("2d");
 
-ctx.beginPath();
-ctx.arc(70, 80, 10, 0, 2 * Math.PI, false);
-ctx.fill();
-ctx.addHitRegion({id: "circle"});
+// ctx.beginPath();
+// ctx.arc(70, 80, 10, 0, 2 * Math.PI, false);
+// ctx.fill();
+// ctx.addHitRegion({id: "circle"});
 
-canvas.addEventListener("mousemove", function(event){
-  if(event.region) {
-    console.log("hit region: " + event);
-  }
-});
+// canvas.addEventListener("mousemove", function(event){
+//   if(event.region) {
+//     console.log("hit region: " + event);
+//   }
+// });
     // console.log(111)
     // $.ajax({
     //     url: 'http://172.16.1.110:8080/txt',

@@ -1,17 +1,24 @@
 # -*- coding: utf-8 -*-
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
-# @Last Modified by:   wangjb
-# @Last Modified time: 2018-05-05 22:50:51
+# @Last Modified by:   wangfpp
+# @Last Modified time: 2018-05-23 16:49:26
 import tornado.ioloop
 import tornado.web
 import torndb
 import json
 import binascii
 import numpy
+import base64
 db = torndb.Connection(host = "localhost", database = "news", user = "root", password = "ddkk1212")
 
-class mainHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+    def get_current_user(self):
+        phonenum = self.get_secure_cookie('news')
+        return phonenum
+
+class mainHandler(BaseHandler):
+
     def get(self,body):
         query =  self.request.arguments
         print query
@@ -94,27 +101,64 @@ class login(tornado.web.RequestHandler):
             else :
                 if search[0]['password'] == password:
                     self.set_status(200)
-                    self.set_secure_cookie('news','aaaaaa',expires_days=1,version=None)
+                    self.set_secure_cookie('news',phonenum,expires_days=1,version=None)
                     self.finish(json.dumps({"data":{"username":search[0]['name'],"phonenum":search[0]['phonenum']}}))
                 else:
                     self.set_status(403)
                     self.finish(json.dumps({"reason":'pass err'}))
         else:
             self.set_status(400)
-class author(tornado.web.RequestHandler):
+class author(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
         cookie = self.get_secure_cookie('news')
-        if cookie:
-            self.set_status(200)
-            self.finish({'data':'success'})
+        name = self.get_current_user()
+        print 'aaa{}'.format(name)
+        # if cookie:
+        #     self.set_status(200)
+        #     self.finish({'data':'success'})
+class houses(tornado.web.RequestHandler):
+    def get(self,body):
+        query =  self.request.arguments
+        data = [{'id':'aaaaa','titile':'河南庄北校区','location':'5楼','price':'500.00','des':['学区房','商业区','海景房']},
+                {'id':'bbbb','titile':'河南庄北校区','location':'5楼','price':'500.00','des':['学区房','商业区','海景房']},
+               {'id':'ccc','titile':'河南庄北校区','location':'5楼','price':'500.00','des':['学区房','商业区','海景房']},
+                {'id':'ddd','titile':'河南庄北校区','location':'5楼','price':'500.00','des':['学区房','商业区','海景房']}]
+        if query:
+            idx = query['id'][0]
+            data_body = []
+            for item in data:
+                print item['id'] == idx
+                if item['id'] == idx:
+                    data_body = item
+                    break
+            self.finish(json.dumps({'data':data_body}))
+        else:
+            self.finish(json.dumps({'data':data}))
+class img(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header("Content-type", "image/png")
+        f = open('../login.png','rb')
+        img = f.read()
+        f.close()
+        #self.finish({'img':base64.b64encode(img)})
+        self.write('data:image/png;base64,{}'.format(base64.b64encode(img)))
+                      
+
 def main():
+    settings = {
+        "cookie_secret": "aaaaa",
+        "login_url": "/api/prelogin/",
+    }
     app = tornado.web.Application(
         [(r'/api/txt/(.*)',mainHandler),
         (r'/api/txtdetail/(.*)',controlNews),
         (r'/api/register/(.*)',register),
         (r'/api/login/(.*)',login),
-        (r'/api/prelogin/',author)
-        ],cookie_secret="aaaaaa"
+        (r'/api/prelogin/',author),
+        (r'/api/houses/(.*)',houses),
+        (r'/api/img/',img)
+        ],**settings
     )
     app.listen('8080')
     tornado.ioloop.IOLoop.current().start()

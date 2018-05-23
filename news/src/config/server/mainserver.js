@@ -1,8 +1,8 @@
 /*
 * @Author: wangfpp
 * @Date:   2018-04-25 15:24:23
-* @Last Modified by:   wangjb
-* @Last Modified time: 2018-05-06 00:07:00
+* @Last Modified by:   wangfpp
+* @Last Modified time: 2018-05-22 15:21:20
 */
 import axios from 'axios'
 let mainServer = {
@@ -26,7 +26,7 @@ const jsonPath = 'static/json/'
 // 	}
 // }else{
 	mainServer = {
-		getNews :(params =>{
+		getNews :(params =>{//获取新闻列表
 			return new Promise((resolve,reject)=>{
 				axios.get(`/api/txt/`,params).then( res=>{
 					resolve(res.data)
@@ -35,7 +35,7 @@ const jsonPath = 'static/json/'
 				})
 			})
 		}),
-		controlNews : (params =>{
+		controlNews : (params =>{//获取新闻详情
 			return new Promise((resolve,reject)=>{
 				axios.get(`/api/txtdetail/`,params).then( res=>{
 					resolve(res.data)
@@ -44,7 +44,7 @@ const jsonPath = 'static/json/'
 				})
 			})
 		}),
-		updateNews : (params =>{
+		updateNews : (params =>{//更新新闻
 			return new Promise((resolve,reject)=>{
 				axios.put(`/api/txtdetail/`,params).then( res=>{
 					resolve(res.data)
@@ -53,7 +53,7 @@ const jsonPath = 'static/json/'
 				})
 			})
 		}),
-		register : (params => {
+		register : (params => {//注册
 			return new Promise( (resolve,reject) => {
 				axios.post(`/api/register/`,params).then( res =>{
 					resolve(res.data)
@@ -62,7 +62,7 @@ const jsonPath = 'static/json/'
 				})
 			})
 		}),
-		login : params => {
+		login : params => {//登录
 			return new Promise( (resolve,reject) => {
 				axios.post(`/api/login/`,params).then( res => {
 					resolve(res.data)

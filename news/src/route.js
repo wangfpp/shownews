@@ -1,8 +1,8 @@
 /*
 * @Author: wangfpp
 * @Date:   2018-04-25 16:11:10
-* @Last Modified by:   wangjb
-* @Last Modified time: 2018-05-04 12:23:41
+* @Last Modified by:   wangfpp
+* @Last Modified time: 2018-05-23 15:48:02
 */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -11,23 +11,31 @@ import news from '@/router/news/news.vue'
 import user from '@/router/user/user.vue'
 Vue.use(Router)
 Vue.use(Vuex)
+let city = {
+  '青岛' : 'qingdao',
+  '北京' : 'bj'
+}
+let key = "北京"
 export default new Router({
   routes: [
-    {
+     {
       path: '/',
       name: 'login',
-      component: resolve => require(['@/router/login'],resolve)
+      component: resolve => require(['@/router/login'],resolve),
+      site : true
     },
     {
-      path: '/home',
+      path: `/home`,
       name: 'home',
       component: resolve => require(['@/router/home/home.vue'], resolve),
-      redirect:'/home/news',
+      redirect:`/home/news`,
+      site : true,
       children : [
         {
-          path : '/home/news',
+          path : `/home/news`,
           name : 'news',
-          component : news
+          component : news,
+          site : true
         },
         {
           path : '/home/user',

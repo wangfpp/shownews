@@ -10,6 +10,7 @@
 		<Button type="primary" shape="circle" v-on:click = "updateText()">更新</Button type="primary" shape="circle">
 		<Button type="primary" shape="circle" v-on:click = "origin_url()">跳转原网页</Button type="primary" shape="circle">
 		<Spin fix v-if = "loading">加载中...</Spin>
+		<img :src="img" alt="">
 	</div>
 </template>
 
@@ -17,6 +18,7 @@
 import { mainServer } from 'server/mainserver.js'
 import { Card ,Button, Spin, Col} from 'iview'
 import html2canvas from 'html2canvas'
+import './detail.scss'
 import axios from 'axios'
 	export default {
 		name : 'detail',
@@ -26,7 +28,8 @@ import axios from 'axios'
 				newsDetail : '',
 				loading : true,
 				html : '',
-				name : ''
+				name : '',
+				img : ''
 			}
 		},
 		components : {
@@ -72,13 +75,15 @@ import axios from 'axios'
 				mainServer.getOriginalNews('http://www.chinanews.com/gn/2018/05-04/8506380.shtml').then(res => {
 				})
 			})
+			axios.get('api/img/').then(res => {
+				_this.img = res.data
+			})
 				
 		}
 	}
 </script>
 
 <style scoped>
-	@import './detail.scss';
 </style>
 
 

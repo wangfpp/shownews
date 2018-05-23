@@ -14,6 +14,15 @@ import 'iview/dist/styles/iview.css'
 Vue.config.productionTip = false
 import {Message} from 'iview'
 Vue.prototype.$Message = Message
+
+router.beforeEach((to,from,next) => {
+	iView.LoadingBar.start()
+	next()
+})
+
+router.afterEach(router => {
+	iView.LoadingBar.finish();
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
