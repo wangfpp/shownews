@@ -9,6 +9,8 @@
 ## 1.项目依赖:
 - Python2.7
 - Mysql
+	- Mysql database news需要提前建立好
+	- table newsInfo
 - Tornado
 - json
 	- 格式化JSON数据
@@ -31,6 +33,9 @@
 - 注册 登录功能
 - 获取所有新闻
 - 更新/更改新闻信息
+- 计划新增内容
+	- 1.各类新闻占比饼状图
+	- 2.增加搜索条件
 
 # 有待优化项
 - 界面优化
