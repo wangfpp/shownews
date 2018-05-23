@@ -2,7 +2,7 @@
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
 # @Last Modified by:   wangfpp
-# @Last Modified time: 2018-05-23 16:49:26
+# @Last Modified time: 2018-05-23 17:14:15
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -21,7 +21,7 @@ class mainHandler(BaseHandler):
 
     def get(self,body):
         query =  self.request.arguments
-        print query
+        print 111,user == self.get_current_user()
         if query:
             page = int(query['page'][0])
             size = int(query['size'][0])
@@ -86,7 +86,7 @@ class register(tornado.web.RequestHandler):
                 break
         return False
 class login(tornado.web.RequestHandler):
-    def post(self,user):
+    def post(self,username):
         userinfo = json.loads(self.request.body)
         if userinfo:
             phonenum = userinfo['phonenum']
@@ -100,6 +100,8 @@ class login(tornado.web.RequestHandler):
                 self.finish(json.dumps({"reason":'user not exit'}))
             else :
                 if search[0]['password'] == password:
+                    global user
+                    user = phonenum
                     self.set_status(200)
                     self.set_secure_cookie('news',phonenum,expires_days=1,version=None)
                     self.finish(json.dumps({"data":{"username":search[0]['name'],"phonenum":search[0]['phonenum']}}))
