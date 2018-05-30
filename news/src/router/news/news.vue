@@ -46,25 +46,24 @@ import {Table,Page,Affix,Menu,MenuItem,Icon,MenuGroup,TabPane,Button} from 'ivie
 			changePage(index){
 				let _this = this;
 				this.current = index;
-				console.log(_this.current)
-				this.getNewsList({params :{page:_this.current,size:10}})
+				this.getNewsList({params :{type:'page',page:_this.current,size:10}})
 			},
 			getNewsList(params){
 				let _this = this;
 				mainServer.getNews(params).then( res => {
-				res.data.forEach(item => {
-					item['type'] = newsType[item['type']]				
+					res.data.forEach(item => {
+						item['type'] = newsType[item['type']]				
+					})
+					_this.news = res.data;
+					_this.total = res.total;
+					_this.loading = false;
 				})
-				_this.news = res.data;
-				_this.total = res.total;
-				_this.loading = false;
-			})
 			}
 
 		},
 		mounted () {
 			let _this = this;
-			this.getNewsList({params :{page:_this.current,size:10}})
+			this.getNewsList({params :{type:'page',page:_this.current,size:10}})
 			console.log(this.news)
 		}
 	}

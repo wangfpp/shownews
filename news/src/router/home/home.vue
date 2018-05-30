@@ -29,6 +29,10 @@ import {Affix,Menu,MenuItem,Icon} from 'iview'
 					{
 						text : '用户管理',
 						path : '/home/user'
+					},
+					{
+						text : '报表统计',
+						path : '/home/chart'
 					}
 				]
 			}
@@ -41,7 +45,7 @@ import {Affix,Menu,MenuItem,Icon} from 'iview'
 		},
 		mounted () {
 			let _this = this;
-			this.name = window.localStorage.getItem('username')
+			this.name = this.$store.state.user.userName
 		}
 	}
 </script>

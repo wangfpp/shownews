@@ -2,7 +2,7 @@
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
 # @Last Modified by:   wangfpp
-# @Last Modified time: 2018-05-23 17:14:15
+# @Last Modified time: 2018-05-30 22:27:17
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -12,33 +12,39 @@ import numpy
 import base64
 db = torndb.Connection(host = "localhost", database = "news", user = "root", password = "ddkk1212")
 
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):#获取用户信息  需要挂载一个login_url
     def get_current_user(self):
         phonenum = self.get_secure_cookie('news')
         return phonenum
 
-class mainHandler(BaseHandler):
-
+class mainHandler(BaseHandler):#获取新闻信息接口
     def get(self,body):
         query =  self.request.arguments
-        print 111,user == self.get_current_user()
+        
         if query:
-            page = int(query['page'][0])
-            size = int(query['size'][0])
-            info = db.query("select * from newsInfo;")
-            total = len(info)
-            info = info[(page -1)*size:(page)*size]
-            print len(info)
+            getType = query['type'][0]
+            if getType == 'page':
+                page = int(query['page'][0])
+                size = int(query['size'][0])
+                info = db.query("select * from newsInfo;")
+                total = len(info)
+                info = info[(page -1)*size:(page)*size]
+                for item in info:
+                    item['text'] = binascii.unhexlify(item['text']) 
+            elif getType == 'chart':
+                info = db.query("select type from newsInfo")
+                total = len(info)
         else:
             info = db.query("select * from newsInfo;")
             total = len(info)
+            for item in info:
+                item['text'] = binascii.unhexlify(item['text']) 
         #jret = json.dumps(info)
-        for item in info:
-            item['text'] = binascii.unhexlify(item['text']) 
+        
         self.set_header('Access-Control-Allow-Origin','*')
         self.finish(json.dumps({'data':info,'total':total}))
         #self.write(info)
-class controlNews(tornado.web.RequestHandler):
+class controlNews(tornado.web.RequestHandler):#获取新闻信息的详细信息 以及更新新闻信息
     def get(self,database):
         newsid =  str('"'+self.get_query_arguments('id',strip=True)[0]+'"')
         sql = "select * from newsInfo where id={0}".format(newsid)
@@ -56,7 +62,7 @@ class controlNews(tornado.web.RequestHandler):
         else:
             self.set_status(500)
         
-class register(tornado.web.RequestHandler):
+class register(tornado.web.RequestHandler):#注册
     def post(self,user):
         userinfo = json.loads(self.request.body)
         print userinfo
@@ -85,7 +91,7 @@ class register(tornado.web.RequestHandler):
                 return True
                 break
         return False
-class login(tornado.web.RequestHandler):
+class login(tornado.web.RequestHandler):#登录
     def post(self,username):
         userinfo = json.loads(self.request.body)
         if userinfo:
@@ -96,7 +102,6 @@ class login(tornado.web.RequestHandler):
             if len(search) == 0:
                 self.set_status(403)
                 self.set_header('Access-Control-Expose-Headers','Authentication')
-                
                 self.finish(json.dumps({"reason":'user not exit'}))
             else :
                 if search[0]['password'] == password:
@@ -110,7 +115,7 @@ class login(tornado.web.RequestHandler):
                     self.finish(json.dumps({"reason":'pass err'}))
         else:
             self.set_status(400)
-class author(BaseHandler):
+class author(BaseHandler):#用户认证
     @tornado.web.authenticated
     def get(self):
         cookie = self.get_secure_cookie('news')

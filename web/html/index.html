@@ -11,7 +11,20 @@
     p:matches(:first-child, .special) {
       color: red;
     }
-   
+   ul{
+    height: 200px;
+    position: absolute;
+    overflow-y: scroll;
+    width: 500px;
+    top: 0;
+   }
+   ul>li{
+    height: 300px;
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 0;
+   }
 </style>
 <body>
     <!-- <table id="table_news">
@@ -31,19 +44,51 @@
             </p>
         </div>
     </table> -->
-    <p>1</p>
+    <!-- <p>1</p>
     <p>2</p>
     <p>3</p>
     <p class="special">4</p>
     <p>5</p>
     <p>6</p>
     <p>7</p>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas"></canvas> -->
+    <h3 id="title"></h3>
+    <ul id="content">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+    </ul>
 </body>
 
 </html>
 <script type="text/javascript">
-    
+var title = document.getElementById('title')
+var node = document.getElementById("content")
+var nodeChild = node.getElementsByTagName('li')
+console.log(nodeChild)
+nodeChild = Array.prototype.slice.call(nodeChild)
+nodeChild.forEach((item,i )=> {
+      item.style.top = i *300 + 'px'
+    })
+node.onscroll = function(a){
+    console.log(node.scrollTop)
+    nodeChild.forEach(item => {
+       item.style.top = parseInt(item.style.top) - parseInt(node.scrollTop) + 'px' 
+       if (parseInt(item.style.top) < 0 && parseInt(item.style.top) > -300){
+            title.innerHTML = item.innerHTML
+       }
+    })
+}
+
+   
+
 // var canvas = document.getElementById("canvas");
 // var ctx = canvas.getContext("2d");
 
