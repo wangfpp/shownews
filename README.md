@@ -48,3 +48,4 @@
 # 项目展示
 ![登录页](./login.png)
 ![主页](./main.png)
+![报表](./chart.png)

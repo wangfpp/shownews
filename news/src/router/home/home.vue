@@ -5,7 +5,7 @@
 				<li v-for="item in menu" :key="item.path">
 					<router-link :to="item.path">{{item.text}}</router-link>
 				</li>
-				<li class="user">当前用户:{{$store.state.user.userName || name}}</li>
+				<li class="user">当前用户:{{$store.state.user.userName}}</li>
 			</ul>
 		</div>
 		<div class="content">

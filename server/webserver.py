@@ -2,7 +2,7 @@
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
 # @Last Modified by:   wangfpp
-# @Last Modified time: 2018-05-30 22:27:17
+# @Last Modified time: 2018-05-31 21:46:32
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -20,10 +20,9 @@ class BaseHandler(tornado.web.RequestHandler):#获取用户信息  需要挂载�
 class mainHandler(BaseHandler):#获取新闻信息接口
     def get(self,body):
         query =  self.request.arguments
-        
         if query:
             getType = query['type'][0]
-            if getType == 'page':
+            if getType == 'page':#分页
                 page = int(query['page'][0])
                 size = int(query['size'][0])
                 info = db.query("select * from newsInfo;")
@@ -32,7 +31,13 @@ class mainHandler(BaseHandler):#获取新闻信息接口
                 for item in info:
                     item['text'] = binascii.unhexlify(item['text']) 
             elif getType == 'chart':
-                info = db.query("select type from newsInfo")
+                info = db.query("select type,time from newsInfo")
+                total = len(info)
+            elif getType == 'time':
+                time = str(query['time'][0])
+                cmd = "select type,time from newsInfo where time ='{}'".format(time)
+                print cmd
+                info = db.query(cmd)
                 total = len(info)
         else:
             info = db.query("select * from newsInfo;")

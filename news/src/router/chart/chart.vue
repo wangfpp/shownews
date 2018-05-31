@@ -1,7 +1,13 @@
 <template>
 	<div id = "chart">
-		<div id="pie">
+		<div id="map">
+			<div id="pie">
 			
+			</div>
+
+			<div id="bar">
+				
+			</div>
 		</div>
 	</div>
 </template>
@@ -15,7 +21,8 @@ import echarts from 'echarts'
 		data () {
 			return {
 				chart : '',
-				results : [],//获取的数据[{type:''},{}]
+				pieData : [],//获取的数据[{type:''},{}]
+				piechart : ''
 			}
 		},
 		components : {
@@ -27,8 +34,8 @@ import echarts from 'echarts'
 				data.forEach(item =>{
 					name.push(item.name)
 				})
-				this.chart = echarts.init(document.getElementById(id));
-				this.chart.setOption({
+				this.piechart = echarts.init(document.getElementById(id));
+				this.piechart.setOption({
 				    tooltip: {
 				        trigger: 'item',
 				        formatter: "{b}: {c} ({d}%)"
@@ -48,22 +55,81 @@ import echarts from 'echarts'
 				        }
 				    ]
 				})
-			}
-		},
-		mounted () {
-			var _this = this;
-			mainServer.getNews({params:{type:'chart'}}).then( res =>{
+			},
+			drawBar(id,data){
+				let _this = this;
+				let xdata = [];
+				let ydata = []
+				for (var key in data){
+					xdata.push(key)
+					ydata.push(data[key])
+				}
+				let chart = echarts.init(document.getElementById(id))
+				chart.setOption({
+					tooltip : {
+						color : [],
+				        trigger: 'axis',
+				        formatter : function(a){
+				        	return a[0].axisValueLabel + ':' + a[0].value
+				        },
+				        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+				            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				        }
+				    },
+				    xAxis: {
+				        type: 'category',
+				        data: xdata
+				    },
+				    yAxis: [
+				    		{
+				    			type : 'value'
+				    		},
+				    		{
+				    			type : 'value',
+				    			show : false
+				    		}
+				    		],
+				    series: [
+				    {
+				        data: ydata,
+				        type: 'bar'
+				    },
+				    {
+				    	data : ydata,
+				    	type : 'line'
+				    }
+				    ]
+				})
+				chart.on('click',params => {
+					var time = params.name;
+					mainServer.getNews({params : {type : 'time',time : time}}).then(res => {
+						let pieData = _this.createData(res.data,'type')
+						_this.pieData = []
+						for (var key in pieData){
+							if(newsType[key]){
+								_this.pieData.push({name : newsType[key], value : pieData[key]})	
+							}else{
+								_this.pieData.push({name : key, value : pieData[key]})
+							}
+							
+						}
+						_this.piechart.dispose()
+						_this.drawPie('pie',_this.pieData)
+					})
+				})
+			},
+			createData(arr,key){
 				let tmp = {}
 				let current = ''
-				res.data.forEach((item,i)=>{
-					if(item.type == current){
+				arr.forEach((item,i)=>{
+					if(item[key] == current){
 						if(current in tmp){
 							tmp[current] += 1;
 						}else{
 							tmp[current] = 1;
 						}
 					}else{
-						current = item.type;
+						current = item[key];
 						if(current in tmp){
 							tmp[current] += 1;
 						}else{
@@ -71,16 +137,24 @@ import echarts from 'echarts'
 						}
 					}
 				})
-				for (var key in tmp){
+				return tmp
+			}
+		},
+		mounted () {
+			var _this = this;
+			mainServer.getNews({params:{type:'chart'}}).then( res =>{
+				let pieData = _this.createData(res.data,'type')
+				let barData = _this.createData(res.data,'time')
+				for (var key in pieData){
 					if(newsType[key]){
-						_this.results.push({name : newsType[key], value : tmp[key]})	
+						_this.pieData.push({name : newsType[key], value : pieData[key]})	
 					}else{
-						_this.results.push({name : key, value : tmp[key]})
+						_this.pieData.push({name : key, value : pieData[key]})
 					}
 					
 				}
-				console.log(_this.results)
-				_this.drawPie('pie',_this.results)
+				_this.drawBar('bar',barData)
+				_this.drawPie('pie',_this.pieData)
 			})
 		}
 	}
