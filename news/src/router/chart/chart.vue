@@ -60,10 +60,11 @@ import echarts from 'echarts'
 				let _this = this;
 				let xdata = [];
 				let ydata = []
-				for (var key in data){
-					xdata.push(key)
-					ydata.push(data[key])
-				}
+				let objectkey = Object.keys(data).sort();
+				objectkey.forEach(item => {
+					xdata.push(item)
+					ydata.push(data[item])
+				})
 				let chart = echarts.init(document.getElementById(id))
 				chart.setOption({
 					tooltip : {
