@@ -54,6 +54,7 @@ import axios from 'axios'
 			getText(params){//获取新闻信息
 				let _this = this;
 				mainServer.controlNews(params).then( req =>{
+					console.log(req)
 					_this.newsDetail = req[0];
 					_this.loading = false;
 				},err => {

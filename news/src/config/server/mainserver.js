@@ -2,9 +2,19 @@
 * @Author: wangfpp
 * @Date:   2018-04-25 15:24:23
 * @Last Modified by:   wangfpp
-* @Last Modified time: 2018-05-22 15:21:20
+* @Last Modified time: 2018-06-01 11:34:44
 */
 import axios from 'axios'
+axios.interceptors.response.use(response =>{
+	return response
+}, err => {
+	status = err.response.status
+	console.log(status)
+	if(status == 401){
+		window.location.href= 'http://0.0.0.0:8081/#/'
+	}
+	return Promise.reject(err)
+})
 let mainServer = {
 	
 }

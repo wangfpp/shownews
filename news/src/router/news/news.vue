@@ -51,6 +51,7 @@ import {Table,Page,Affix,Menu,MenuItem,Icon,MenuGroup,TabPane,Button} from 'ivie
 			getNewsList(params){
 				let _this = this;
 				mainServer.getNews(params).then( res => {
+					console.log(res)
 					res.data.forEach(item => {
 						item['type'] = newsType[item['type']]				
 					})
@@ -64,7 +65,6 @@ import {Table,Page,Affix,Menu,MenuItem,Icon,MenuGroup,TabPane,Button} from 'ivie
 		mounted () {
 			let _this = this;
 			this.getNewsList({params :{type:'page',page:_this.current,size:10}})
-			console.log(this.news)
 		}
 	}
 </script>

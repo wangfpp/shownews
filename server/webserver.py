@@ -2,7 +2,7 @@
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
 # @Last Modified by:   wangfpp
-# @Last Modified time: 2018-05-31 21:46:32
+# @Last Modified time: 2018-06-01 13:17:34
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -14,10 +14,15 @@ db = torndb.Connection(host = "localhost", database = "news", user = "root", pas
 
 class BaseHandler(tornado.web.RequestHandler):#获取用户信息  需要挂载一个login_url
     def get_current_user(self):
-        phonenum = self.get_secure_cookie('news')
-        return phonenum
-
+        cookie = self.get_secure_cookie('news')
+        if cookie:
+            return cookie
+        else:
+            self.set_status(401)
+            self.finish()
+            
 class mainHandler(BaseHandler):#获取新闻信息接口
+    @tornado.web.authenticated
     def get(self,body):
         query =  self.request.arguments
         if query:
@@ -36,7 +41,6 @@ class mainHandler(BaseHandler):#获取新闻信息接口
             elif getType == 'time':
                 time = str(query['time'][0])
                 cmd = "select type,time from newsInfo where time ='{}'".format(time)
-                print cmd
                 info = db.query(cmd)
                 total = len(info)
         else:
@@ -45,8 +49,7 @@ class mainHandler(BaseHandler):#获取新闻信息接口
             for item in info:
                 item['text'] = binascii.unhexlify(item['text']) 
         #jret = json.dumps(info)
-        
-        self.set_header('Access-Control-Allow-Origin','*')
+        self.set_status(200)
         self.finish(json.dumps({'data':info,'total':total}))
         #self.write(info)
 class controlNews(tornado.web.RequestHandler):#获取新闻信息的详细信息 以及更新新闻信息
@@ -56,6 +59,7 @@ class controlNews(tornado.web.RequestHandler):#获取新闻信息的详细信息
         newsDetail = db.query(sql)
         for item in newsDetail:
             item['text'] = binascii.unhexlify(item['text'])
+        self.set_status(200)
         self.finish(json.dumps(newsDetail))
     def put(self,text):
         news = json.loads(self.request.body)
@@ -63,14 +67,15 @@ class controlNews(tornado.web.RequestHandler):#获取新闻信息的详细信息
             newsid = news['id']
             text = binascii.hexlify(news['text'].encode('utf-8'))
             sql = "update newsInfo set text='"'%s'"' where id='"'%s'"';"%(text,newsid)
-            db.execute(sql)
+            newdetail = db.execute(sql)
+            self.set_status(200)
         else:
             self.set_status(500)
+        self.finish(json.dumps(newdetail))
         
 class register(tornado.web.RequestHandler):#注册
     def post(self,user):
         userinfo = json.loads(self.request.body)
-        print userinfo
         if userinfo:
             phonenum = userinfo['phonenum']
             userName = userinfo['username']
@@ -113,7 +118,7 @@ class login(tornado.web.RequestHandler):#登录
                     global user
                     user = phonenum
                     self.set_status(200)
-                    self.set_secure_cookie('news',phonenum,expires_days=1,version=None)
+                    self.set_secure_cookie('news',json.dumps({'phonenum':phonenum,'username':search[0]['name']}),expires_days=1,version=None)
                     self.finish(json.dumps({"data":{"username":search[0]['name'],"phonenum":search[0]['phonenum']}}))
                 else:
                     self.set_status(403)
@@ -123,12 +128,10 @@ class login(tornado.web.RequestHandler):#登录
 class author(BaseHandler):#用户认证
     @tornado.web.authenticated
     def get(self):
-        cookie = self.get_secure_cookie('news')
-        name = self.get_current_user()
-        print 'aaa{}'.format(name)
-        # if cookie:
-        #     self.set_status(200)
-        #     self.finish({'data':'success'})
+        info = self.get_current_user()
+        if info:
+            self.set_status(200)
+            self.finish({'data':info})
 class houses(tornado.web.RequestHandler):
     def get(self,body):
         query =  self.request.arguments

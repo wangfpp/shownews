@@ -71,7 +71,7 @@ import echarts from 'echarts'
 						color : [],
 				        trigger: 'axis',
 				        formatter : function(a){
-				        	return a[0].axisValueLabel + ':' + a[0].value
+				        	return `${a[0].axisValueLabel}:搜集${a[0].value}条新闻`
 				        },
 				        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
 				            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'

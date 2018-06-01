@@ -94,6 +94,8 @@ import { mapState } from 'vuex'
 		mounted () {
 			let _this = this;
 			mainServer.prelogin().then( res => {
+				_this.$store.state.user.userName = res.data.username;
+				_this.$store.state.user.phonenum = res.data.phonenum
 				this.$router.push({
 					name : 'home'
 				})
