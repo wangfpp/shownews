@@ -49,3 +49,15 @@
 ![登录页](./login.png)
 ![主页](./main.png)
 ![报表](./chart.png)
+
+# 遇到的问题
+- 1.Mysql
+
+		$mysql -u root -p
+		Enter password: 
+		ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/tmp/mysql.sock' (2)
+	- 解决方法
+
+			mysqld stop
+			mysql.server start
+	[参考链接](https://stackoverflow.com/questions/11105796/error-2002-cant-connect-to-local-mysql-server-through-socket-applications-ma)
