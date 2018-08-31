@@ -2,7 +2,7 @@
 # @Author: wangfpp 
 # @Date: 2018-04-23 10:16:10 
 # @Last Modified by:   wangfpp
-# @Last Modified time: 2018-06-01 13:17:34
+# @Last Modified time: 2018-08-27 11:02:54
 import tornado.ioloop
 import tornado.web
 import torndb
@@ -10,6 +10,7 @@ import json
 import binascii
 import numpy
 import base64
+import datetime
 db = torndb.Connection(host = "localhost", database = "news", user = "root", password = "ddkk1212")
 
 class BaseHandler(tornado.web.RequestHandler):#获取用户信息  需要挂载一个login_url
@@ -19,7 +20,6 @@ class BaseHandler(tornado.web.RequestHandler):#获取用户信息  需要挂载�
             return cookie
         else:
             self.set_status(401)
-            self.finish()
             
 class mainHandler(BaseHandler):#获取新闻信息接口
     @tornado.web.authenticated
@@ -30,21 +30,33 @@ class mainHandler(BaseHandler):#获取新闻信息接口
             if getType == 'page':#分页
                 page = int(query['page'][0])
                 size = int(query['size'][0])
-                info = db.query("select * from newsInfo;")
+                info = db.query("select *,DATE_FORMAT(time,'%%Y-%%m-%%d') as time from newsInfo;")
                 total = len(info)
                 info = info[(page -1)*size:(page)*size]
                 for item in info:
                     item['text'] = binascii.unhexlify(item['text']) 
             elif getType == 'chart':
-                info = db.query("select type,time from newsInfo")
+                cmd = "select type,DATE_FORMAT(time,'%%Y-%%m-%%d') as time from newsInfo;"
+                info = db.query(cmd)
                 total = len(info)
             elif getType == 'time':
                 time = str(query['time'][0])
-                cmd = "select type,time from newsInfo where time ='{}'".format(time)
+                print time
+                cmd = "select type,DATE_FORMAT(time,'%%Y-%%m-%%d') as time from newsInfo where time ='{}';".format(time)
                 info = db.query(cmd)
                 total = len(info)
+            elif getType == 'date':
+                time = query['time'][0].split('/')
+                print time
+                dateFrom = datetime.datetime.strptime(time[0],'%Y-%m-%d')
+                dateTo = datetime.datetime.strptime(time[1],'%Y-%m-%d')
+                print dateFrom,dateTo
+                # cmd = "select type,DATE_FORMAT(time,'%%Y-%%m-%%d') as time from newsInfo where time between {0} and {1};".format(dateFrom,dateTo)
+                # print cmd
+                # info = db.query(cmd)
+                # total = len(info)
         else:
-            info = db.query("select * from newsInfo;")
+            info = db.query("select *,DATE_FORMAT(time,'%%Y-%%m-%%d') as time from newsInfo;")
             total = len(info)
             for item in info:
                 item['text'] = binascii.unhexlify(item['text']) 
@@ -55,7 +67,7 @@ class mainHandler(BaseHandler):#获取新闻信息接口
 class controlNews(tornado.web.RequestHandler):#获取新闻信息的详细信息 以及更新新闻信息
     def get(self,database):
         newsid =  str('"'+self.get_query_arguments('id',strip=True)[0]+'"')
-        sql = "select * from newsInfo where id={0}".format(newsid)
+        sql = "select *,DATE_FORMAT(time,'%%Y-%%m-%%d') as time from newsInfo where id={0}".format(newsid)
         newsDetail = db.query(sql)
         for item in newsDetail:
             item['text'] = binascii.unhexlify(item['text'])

@@ -10,13 +10,15 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "analyz": "NODE_ENV=production  npm_config_report=true npm run build"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.1.0",
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^2.13.1",
+    "node-cmd": "^3.0.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

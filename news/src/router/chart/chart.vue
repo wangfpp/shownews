@@ -1,5 +1,8 @@
 <template>
 	<div id = "chart">
+		<div id="date">
+			<DatePicker type="daterange" format="yyyy-MM-dd" conform="'true'" placeholder="Select date and time(Excluding seconds)" style="width: 300px" v-model = "newsDate" @on-change = "handleChange"></DatePicker>
+		</div>
 		<div id="map">
 			<div id="pie">
 			
@@ -13,8 +16,9 @@
 </template>
 
 <script type="text/javascript">
-import { mainServer } from 'server/mainserver.js'
-import { newsType } from 'server/en2ch.js'
+import { mainServer } from 'server/mainserver.js';
+import { newsType } from 'server/en2ch.js';
+import { DatePicker } from 'iview';
 import echarts from 'echarts'
 	export default {
 		name : 'chart',
@@ -22,11 +26,12 @@ import echarts from 'echarts'
 			return {
 				chart : '',
 				pieData : [],//获取的数据[{type:''},{}]
-				piechart : ''
+				piechart : '',
+				newsDate: ''// 新闻过滤的时间段
 			}
 		},
 		components : {
-
+			DatePicker
 		},
 		methods : {
 			drawPie(id,data){
@@ -139,6 +144,13 @@ import echarts from 'echarts'
 					}
 				})
 				return tmp
+			},
+			handleChange(e) {
+				this.newsDate = e;
+				let time = e[0]+ '/' +e[1];
+				mainServer.getNews({params:{type: 'date', time: time}}).then(res => {
+					console.log(res);
+				})
 			}
 		},
 		mounted () {
